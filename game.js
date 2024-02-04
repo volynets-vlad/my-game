@@ -58,6 +58,8 @@ class Main extends Phaser.Scene {
             repeat: 1
         });
         this.plane.body.velocity.y = -350;
+            var sound = this.sound.add('jump');
+        sound.play();
     }
     //Функція для створення блоку труби
     addOnePipe(x, y) {
@@ -88,6 +90,7 @@ class Main extends Phaser.Scene {
         this.pipes.children.each(function(pipe) {
             pipe.body.velocity.x = 0;
         });
+        this.scene.restart();
     }
 }
 
