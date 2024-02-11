@@ -4,6 +4,8 @@ class Main extends Phaser.Scene {
         this.load.image('pipe', 'assets/pipe.png');
         this.load.image('sky', 'assets/sky.png');
         this.load.audio('jump', 'assets/jump.wav');
+        this.load.image('bullet', 'assets/bullet.png');
+        this.load.audio('laser', 'assets/laser.wav');
     }
 
     create() {
@@ -33,9 +35,15 @@ class Main extends Phaser.Scene {
             loop: true
         });
         this.physics.add.overlap(this.plane, this.pipes, this.hitPipe, null, this);
+        this.input.mouse.disableContextMenu();
 
+        this.input.on('pointerdown', function (pointer)
+        {
+        //this.add.image(pointer.x, pointer.y, 'bullet');    
+        this.shot();   
+        }, this);
     }
-
+    
     update() {
         if (this.plane.angle < 20) {
             this.plane.angle += 1;
@@ -47,7 +55,21 @@ class Main extends Phaser.Scene {
         if (this.spaceBar.isDown) {
             this.jump();
         }
+        
+
     }
+    shot() {
+    this.bullet = this.physics.add.sprite(this.plane.x, this.plane.y, 'bullet')
+    this.bullet.body.velocity.x = 300;
+    var sound = this.sound.add('laser');
+    sound.play();
+    /*this.game.physics.arcade.collide(pipe, bullets, this.collision, null, this);
+    this.bullet.collideWorldBounds = true;
+    function collision( bullets, pipe){
+            pipe.kill();
+        }*/
+    }
+
     jump() {
         this.tweens.add({
             targets: this.plane,
